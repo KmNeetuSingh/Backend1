@@ -19,35 +19,7 @@ Develop a command-line calculator in Node.js supporting basic operations and ran
 - Handling terminal input
 - Using the `crypto` module for generating random numbers
 - Implementing basic mathematical operations
-
-### Assignment 2: Assign2.js File Manipulator
-
-**Instructions**:  
-Create a Node.js program that allows for basic file manipulation (reading, deleting, creating, appending, renaming, and listing files) via command-line arguments.
-
-**Topics Covered**:
-- Handling terminal input
-- Using the File System module for file operations
-- Implementing Node.js basics
-
-## Usage
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-username/daily-nodejs-assignments.git
-   ```
-
-2. **Navigate to an Assignment**:
-   ```bash
-   cd daily-nodejs-assignments/assignment-folder
-   ```
-
-3. **Read the Instructions**:
-   - Open the README.md file in the assignment folder and follow the instructions.
-
-4. **Complete the Assignment**:
-   - Work on the assignment as per the provided guidelines.
-# Assignment Title: Node.js File Manipulator
+# Assignment 2: Assign.js File Manipulator
 
 ## Instructions
 
@@ -83,8 +55,95 @@ node index.js create test.txt
 # Append to a file
 node index.js append test.txt "Hello, world!"
 
-# Rename a file
-node index.js rename test.txt newname.txt
+# Todo Application - Assignment 3
 
-# List directory contents
-node index.js list .
+## Overview
+
+Create a basic Todo Application with CRUD operations using Node.js and Express. This is my first server project.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm
+
+### Installation
+
+1. Clone the repository.
+   ```sh
+   git clone <your-repo-url>
+   ```
+2. Navigate to the project directory.
+   ```sh
+   cd <project-directory>
+   ```
+3. Install dependencies.
+   ```sh
+   npm install
+   ```
+
+### Running the Server
+
+Start the server using Nodemon:
+```sh
+npm start
+```
+Server runs at `http://localhost:2000`.
+
+## API Endpoints
+
+### Get All Todos
+- **Method:** `GET`
+- **URL:** `http://localhost:2000/todos`
+
+### Add a New Todo
+- **Method:** `POST`
+- **URL:** `http://localhost:2000/todos`
+- **Headers:** `Content-Type: application/json`
+- **Body:**
+  ```json
+  {
+    "id": 3,
+    "title": "New Todo",
+    "status": false
+  }
+  ```
+
+### Update Even ID Todos
+- **Method:** `PUT`
+- **URL:** `http://localhost:2000/todos/even`
+
+### Delete Completed Todos
+- **Method:** `DELETE`
+- **URL:** `http://localhost:2000/todos/completed`
+
+## Project Structure
+
+```Assignment3
+.
+├── db.json
+├── index.js
+├── package.json
+└── README.md
+```
+
+### `db.json`
+
+Contains todos data:
+```json
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Learn Node.js",
+      "status": false
+    },
+    {
+      "id": 2,
+      "title": "Build a REST API",
+      "status": false
+    }
+  ]
+}
+
