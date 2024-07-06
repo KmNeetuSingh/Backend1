@@ -19,20 +19,18 @@ Develop a command-line calculator in Node.js supporting basic operations and ran
 - Handling terminal input
 - Using the `crypto` module for generating random numbers
 - Implementing basic mathematical operations
-# Assignment 2: Assign.js File Manipulator
 
-## Instructions
+### Assignment 2: Assign.js File Manipulator
 
+**Instructions**:  
 Create a Node.js program that allows for basic file manipulation (reading, deleting, creating, appending, renaming, and listing files) via command-line arguments.
 
-### Topics Covered
-
+**Topics Covered**:
 - Handling terminal input
 - File System module
 - Node.js basics
 
-## Task Details
-
+**Task Details**:
 - **Reading a file**: `node index.js read <file-path>`
 - **Deleting a file**: `node index.js delete <file-path>`
 - **Creating a file**: `node index.js create <file-path>`
@@ -40,8 +38,7 @@ Create a Node.js program that allows for basic file manipulation (reading, delet
 - **Renaming a file**: `node index.js rename <old-file-path> <new-file-path>`
 - **Listing directory contents**: `node index.js list <directory-path>`
 
-## Example Usage
-
+**Example Usage**:
 ```bash
 # Read a file
 node index.js read test.txt
@@ -54,8 +51,9 @@ node index.js create test.txt
 
 # Append to a file
 node index.js append test.txt "Hello, world!"
+```
 
-###Todo Application - Assignment 3
+### **Todo Application - Assignment 3**
 
 ## Overview
 
@@ -120,7 +118,8 @@ Server runs at `http://localhost:2000`.
 
 ## Project Structure
 
-```Assignment3
+```plaintext
+Assignment3
 .
 ├── db.json
 ├── index.js
@@ -146,4 +145,3 @@ Contains todos data:
     }
   ]
 }
-
