@@ -55,7 +55,7 @@ node index.js create test.txt
 # Append to a file
 node index.js append test.txt "Hello, world!"
 
-# Todo Application - Assignment 3
+###Todo Application - Assignment 3
 
 ## Overview
 
