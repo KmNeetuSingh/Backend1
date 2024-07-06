@@ -1,5 +1,5 @@
 // Import the required module
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 // Get the commands using process.argv
 let args = process.argv.slice(2);
