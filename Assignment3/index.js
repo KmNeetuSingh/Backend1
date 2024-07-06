@@ -16,6 +16,8 @@ function writeDb(data) {
 
 app.get('/todos', (req, res) => {
   const db = readDb();
+
+
   res.json(db.todos);
 });
 
