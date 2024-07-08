@@ -1,3 +1,4 @@
+//Earlier I use ES6 but that's not working i just want to test why it is not working nd sudden i realize tha i submitted it on github so ijust edited it.
 // Import the required module
 const crypto = require('crypto');
 
@@ -15,8 +16,8 @@ function calculate(operation, args) {
             result = numbers.reduce((acc, num) => acc + num, 0);
             break;
         case 'sub':
-            result = numbers.reduce((acc, num) => acc - num, 0);
-            break;
+            result = numbers.reduce((acc, num) => acc - num,0);
+            break; 
         case 'mult':
             result = numbers.reduce((acc, num) => acc * num, 1);
             break;
