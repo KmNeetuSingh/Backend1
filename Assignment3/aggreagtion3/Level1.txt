@@ -1,0 +1,57 @@
+// 1. Retrieve unique cities from the buyers' addresses
+db.buyers.distinct("address.city");
+
+// 2. Retrieve unique zip codes from the buyers' addresses
+db.buyers.distinct("address.zip");
+
+// 3. Retrieve unique order_id in ascending order from order_details
+db.order_details.distinct("_id").sort();
+
+// 4. Retrieve unique customer_id from orders
+db.orders.distinct("customer_id");
+
+// 5. Retrieve unique paymentMethods from the payments collection
+db.payments.distinct("paymentMethod");
+
+// 6. Retrieve unique payment statuses from the payments collection
+db.payments.distinct("paymentstatus");
+
+// 7. Retrieve unique category_id from products
+db.products.distinct("category_id");
+
+// 8. Aggregate total sales per customer and list top 5 customers by total sales amount
+db.orders.aggregate([
+  { $group: { _id: "$customer_id", totalSales: { $sum: "$total" } } },
+  { $sort: { totalSales: -1 } },
+  { $limit: 5 }
+]);
+
+// 9. Aggregate orders to count how many there are per status, show first 3 statuses
+db.orders.aggregate([
+  { $group: { _id: "$status", count: { $sum: 1 } } },
+  { $sort: { count: -1 } },
+  { $limit: 3 }
+]);
+
+// 10. Calculate total amount of payments with success status
+db.payments.aggregate([
+  { $match: { paymentstatus: "success" } },
+  { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+]);
+
+// 11. Aggregate suppliers to find the one with the highest total quantity of products supplied, filtering to include suppliers with total product quantity > 100
+db.products.aggregate([
+  { $group: { _id: "$supplier_id", totalQuantity: { $sum: "$quantity" } } },
+  { $match: { totalQuantity: { $gt: 100 } } },
+  { $sort: { totalQuantity: -1 } },
+  { $limit: 1 }
+]);
+
+// 12. Find the top-selling product category based on total sales revenue
+db.order_details.aggregate([
+  { $lookup: { from: "products", localField: "product_id", foreignField: "_id", as: "product_details" } },
+  { $unwind: "$product_details" },
+  { $group: { _id: "$product_details.category_id", totalRevenue: { $sum: "$price" } } },
+  { $sort: { totalRevenue: -1 } },
+  { $limit: 1 }
+]);

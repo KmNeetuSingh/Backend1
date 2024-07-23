@@ -1,0 +1,145 @@
+1. Retrieve documents from the `orders` where `customer_id` is 1.
+   ```mongodb
+   db.orders.aggregate([
+     { $match: { customer_id: 1 } }
+   ])
+   ```
+
+2. Retrieve documents from the `products` where `supplier_id` is 3.
+   ```mongodb
+   db.products.aggregate([
+     { $match: { supplier_id: 3 } }
+   ])
+   ```
+
+3. Retrieve documents from the `orders` collection with `status` as "shipped".
+   ```mongodb
+   db.orders.aggregate([
+     { $match: { status: "shipped" } }
+   ])
+   ```
+
+4. Retrieve `amount` and `paymentMethod` from `payments` where `paymentMethod` is not "UPI".
+   ```mongodb
+   db.payments.aggregate([
+     { $match: { paymentMethod: { $ne: "UPI" } } },
+     { $project: { amount: 1, paymentMethod: 1 } }
+   ])
+   ```
+
+5. Retrieve `paymentstatus` where `amount` is greater than 100.
+   ```mongodb
+   db.payments.aggregate([
+     { $match: { amount: { $gt: 100 } } },
+     { $project: { paymentstatus: 1 } }
+   ])
+   ```
+
+6. Retrieve `shipper_id` and `price` from `order_details` where `price` is greater than 2000.
+   ```mongodb
+   db.order_details.aggregate([
+     { $match: { price: { $gt: 2000 } } },
+     { $project: { shipper_id: 1, price: 1 } }
+   ])
+   ```
+
+7. Retrieve `customer_id` and `_id` from `orders` where `status` is not "shipped".
+   ```mongodb
+   db.orders.aggregate([
+     { $match: { status: { $ne: "shipped" } } },
+     { $project: { customer_id: 1, _id: 1 } }
+   ])
+   ```
+
+8. Retrieve documents from `products` where `category_id` is 1 without `_id`.
+   ```mongodb
+   db.products.aggregate([
+     { $match: { category_id: 1 } },
+     { $project: { _id: 0 } }
+   ])
+   ```
+
+9. Retrieve `name` and `quantity` from `products` where `price` is greater than 1500.
+   ```mongodb
+   db.products.aggregate([
+     { $match: { price: { $gt: 1500 } } },
+     { $project: { name: 1, quantity: 1 } }
+   ])
+   ```
+
+10. Retrieve `name` from `shippers` where `phone` number is "1-800-742-5877".
+    ```mongodb
+    db.shippers.aggregate([
+      { $match: { phone: "1-800-742-5877" } },
+      { $project: { name: 1 } }
+    ])
+    ```
+
+11. Retrieve `city` and `phone` of `suppliers` where `name` is "Sony".
+    ```mongodb
+    db.suppliers.aggregate([
+      { $match: { name: "Sony" } },
+      { $project: { city: 1, phone: 1 } }
+    ])
+    ```
+
+12. Retrieve `name` of `suppliers` where `city` is "Tokyo".
+    ```mongodb
+    db.suppliers.aggregate([
+      { $match: { city: "Tokyo" } },
+      { $project: { name: 1 } }
+    ])
+    ```
+
+13. Find total `amount` of payments made through "UPI".
+    ```mongodb
+    db.payments.aggregate([
+      { $match: { paymentMethod: "UPI" } },
+      { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+    ])
+    ```
+
+14. Find buyers' `city` using the key name "city" who use email addresses ending with "hotmail.com".
+    ```mongodb
+    db.buyers.aggregate([
+      { $match: { email: /hotmail\.com$/ } },
+      { $project: { city: "$address.city" } }
+    ])
+    ```
+
+15. Retrieve the top 5 most recent orders that have been "shipped", projecting `order_date`, `status`, and `total` amount.
+    ```mongodb
+    db.orders.aggregate([
+      { $match: { status: "shipped" } },
+      { $sort: { order_date: -1 } },
+      { $limit: 5 },
+      { $project: { order_date: 1, status: 1, total: 1 } }
+    ])
+    ```
+
+16. Aggregate the first 3 payments with a "success" status, projecting `payment_date`, `amount`, and `paymentMethod`.
+    ```mongodb
+    db.payments.aggregate([
+      { $match: { paymentstatus: "success" } },
+      { $limit: 3 },
+      { $project: { payment_date: 1, amount: 1, paymentMethod: 1 } }
+    ])
+    ```
+
+17. Aggregate all pending orders, sort them by `order_date` in descending order, and project `customer_id`, `order_date`, and `total` amount.
+    ```mongodb
+    db.orders.aggregate([
+      { $match: { status: "pending" } },
+      { $sort: { order_date: -1 } },
+      { $project: { customer_id: 1, order_date: 1, total: 1 } }
+    ])
+    ```
+
+18. Aggregate products, sort them by `quantity` in descending order, limit the result to the top 10 items, and project `name` and `quantity`.
+    ```mongodb
+    db.products.aggregate([
+      { $sort: { quantity: -1 } },
+      { $limit: 10 },
+      { $project: { name: 1, quantity: 1 } }
+    ])
+    ```
