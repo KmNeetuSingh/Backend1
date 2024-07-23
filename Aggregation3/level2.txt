@@ -1,0 +1,125 @@
+1. Retrieve documents from the orders in ascending order by total:
+   db.orders.find().sort({ total: 1 })
+
+2. Retrieve the oldest paymentMethod from the payments collection as '_id':
+   db.payments.find().sort({ payment_date: 1 }).limit(1).distinct('paymentMethod')
+
+3. Retrieve 2nd and 3rd buyers from the buyers collection:
+   db.buyers.find().skip(1).limit(2)
+
+4. Retrieve the most expensive product from order_details:
+   db.order_details.aggregate([
+     { $lookup: { from: 'products', localField: 'product_id', foreignField: '_id', as: 'product_info' } },
+     { $unwind: '$product_info' },
+     { $project: { _id: 0, order_id: 1, product_id: 1, price: '$product_info.price', quantity: 1, totalPrice: { $multiply: ['$product_info.price', '$quantity'] } } },
+     { $sort: { totalPrice: -1 } },
+     { $limit: 1 }
+   ])
+
+5. Retrieve the first order from the orders as per the order_date:
+   db.orders.find().sort({ order_date: 1 }).limit(1)
+
+6. Retrieve the last 3 orders from the orders collection who have less total amount:
+   db.orders.find().sort({ total: 1 }).limit(3)
+
+7. Retrieve the most recent shipped order from the orders collection:
+   db.orders.find({ status: 'shipped' }).sort({ order_date: -1 }).limit(1)
+
+8. Get the total revenue from all orders:
+   db.orders.aggregate([
+     { $group: { _id: null, totalRevenue: { $sum: '$total' } } }
+   ])
+
+9. Retrieve all the orders that shipped before 2022-05-26:
+   db.orders.find({ ship_date: { $lt: '2022-05-26' } })
+
+10. Find the maximum price (maxPrice) of products and their names (name) for each category:
+    db.products.aggregate([
+      { $group: { _id: '$category_id', maxPrice: { $max: '$price' }, products: { $push: { name: '$name', price: '$price' } } } },
+      { $project: { _id: 0, category_id: '$_id', maxPrice: 1, products: { $filter: { input: '$products', as: 'product', cond: { $eq: ['$$product.price', '$maxPrice'] } } } } }
+    ])
+
+11. Find most used payment method (paymentMethod) and the number of times it is used (count):
+    db.payments.aggregate([
+      { $group: { _id: '$paymentMethod', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 1 }
+    ])
+
+12. Find the total count of orders by status:
+    db.orders.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ])
+
+13. Retrieve the orders grouped by customer_id with the maximum total:
+    db.orders.aggregate([
+      { $group: { _id: '$customer_id', maxTotal: { $max: '$total' } } }
+    ])
+
+
+# MongoDB Aggregation Queries
+
+## 14. Assess the Impact of RAM Capacity on Laptop Prices and Ratings
+```javascript
+db.laptops.aggregate([
+  {
+    $group: {
+      _id: "$RAM",
+      averagePrice: { $avg: "$Price" },
+      averageRating: { $avg: "$Rating" }
+    }
+  },
+  {
+    $sort: { _id: 1 }  
+  }
+])
+
+15. Investigate the Price and Rating Distribution for Gaming Laptops
+
+db.laptops.aggregate([
+  {
+    $match: { "Category": "Gaming" }
+  },
+  {
+    $group: {
+      _id: "$Brand",
+      averagePrice: { $avg: "$Price" },
+      averageRating: { $avg: "$Rating" },
+      gpuType: { $first: "$GPU_Type" },  // Assuming GPU_Type is consistent within the same brand
+      averageRAM: { $avg: "$RAM" }
+    }
+  },
+  {
+    $sort: { averageRating: -1 }  // Optional: Sort by rating to see the top brands
+  }
+])
+
+//16. Analyze the Warranty Periods Offered by Different Brands
+ 
+db.laptops.aggregate([
+  {
+    $group: {
+      _id: "$Brand",
+      averagePrice: { $avg: "$Price" },
+      averageRating: { $avg: "$Rating" },
+      averageWarranty: { $avg: "$Warranty" }
+    }
+  },
+  {
+    $sort: { averagePrice: -1 }  // Optional: Sort by average price
+  }
+])
+//17. Examine the Relationship Between Processor Brand and Laptop Price, Rating, and Primary Storage Capacity
+db.laptops.aggregate([
+  {
+    $group: {
+      _id: "$Processor_Brand",
+      averagePrice: { $avg: "$Price" },
+      averageRating: { $avg: "$Rating" },
+      averagePrimaryStorage: { $avg: "$Primary_Storage" }
+    }
+  },
+  {
+    $sort: { averagePrice: -1 }  // Optional: Sort by average price
+  }
+])
